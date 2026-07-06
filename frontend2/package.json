@@ -14,7 +14,9 @@
     "bootstrap-icons": "^1.13.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",
-    "vue-router": "^5.1.0"
+    "vue-dompurify-html": "^5.3.0",
+    "vue-router": "^5.1.0",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.7",

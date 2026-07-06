@@ -1,66 +1,83 @@
 <template>
-    <div class="bg-white d-flex flex-column flex-shrink-0 p-3 border vh-100 " style="width: 280px;">
-        <span class="fs-4 text-center">Search</span>
-        <hr>
-        <div class="d-flex mb-3">
-            <input type="text" class="form-control" placeholder="Search Product" v-model="data.term"><button 
-  class="btn btn-sm btn-dark" 
-  :disabled="data.term === ''"
-  @click="filterByTerm()"
->
-  <i class="bi bi-search"></i>
-</button>
+  <div
+    class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary border shadow vh-100"
+    style="width: 280px"
+  >
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li>
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Product..."
+            aria-label="Search Product..."
+            aria-describedby="basic-addon2"
+            v-model="data.term"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              :disabled="!data.term"
+              @click="productsStore.getProductsWithTerm(data.term)"
+            >
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
         </div>
-        <hr>
-        <span class="fs-4 text-center">Colors</span>
-        <hr>
-        <div class="d-flex justify-content-around mb-3">
-            <div v-for="color in productStore.colors" :key="color.id"
-                :style="{ backgroundColor: color.name, width: '30px', height: '30px', display: 'inline-block', borderRadius: '30px' }" @click="productStore.fetchProductsByColor(color.slug)">
-            </div>
-        </div>
-        <hr>
-        <span class="fs-4 text-center">Sizes</span>
-        <hr>
-        <div class="d-flex justify-content-around">
-            <span v-for="size in productStore.sizes" :key="size.id" class="bg-secondary p-2 badge" @click="productStore.fetchProductsBySize(size.slug)">{{ size.name
-                }}</span>
-        </div>
-
-
-
-
-        <!-- <div class="dropdown"> <a href="#"
-                class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false"> <img src="https://github.com/mdo.png" alt="" width="32"
-                    height="32" class="rounded-circle me-2"> <strong>mdo</strong> </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-        </div> -->
-    </div>
+      </li>
+      <li><hr /></li>
+      <li class="text-center">
+        <h3>Colors</h3>
+      </li>
+      <li class="nav-item d-flex justify-content-between">
+        <div
+          v-for="color in productsStore.colors"
+          :key="color.id"
+          @click="productsStore.getProductsWithColor(color.slug)"
+          :style="{
+            backgroundColor: color.name,
+            width: '30px',
+            height: '30px',
+            borderRadius: '30px',
+            display: 'inline-block',
+          }"
+        ></div>
+      </li>
+      <li>
+        <hr />
+      </li>
+      <li class="text-center">
+        <h3>Sizes</h3>
+      </li>
+      <li class="nav-item d-flex justify-content-between">
+        <span
+          v-for="size in productsStore.sizes"
+          @click="productsStore.getProductsWithSize(size.slug)"
+          :key="size.id"
+          class="badge bg-secondary text-white"
+          >{{ size.name }}</span
+        >
+      </li>
+    </ul>
+    <hr />
+  </div>
 </template>
 
 <script setup>
-import { useProductStore } from '@/stores/useProductStore';
-import { reactive } from 'vue';
+import { onMounted, reactive } from "vue";
+import { useProductsStore } from "@/stores/useProductsStore.js";
 
-const productStore = useProductStore()
+const productsStore = useProductsStore();
 
 const data = reactive({
-    term:''
-})
+  term: "",
+});
 
-const filterByTerm = () =>{
-    productStore.fetchProductsByTerm(data.term);
-}
-
+onMounted(() => {
+  productsStore.getAllProducts();
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

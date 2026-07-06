@@ -11,48 +11,50 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return ProductResource::collection(
-            Product::with(['colors','sizes'])->latest()->get()
+            Product::with(['colors', 'sizes'])->latest()->get()
         )->additional([
             'colors' => Color::has('products')->latest()->get(),
             'sizes' => Size::has('products')->latest()->get()
         ]);
     }
 
-    public function getProductWithColor(Color $color){
+    public function getProductWithColor(Color $color)
+    {
         return ProductResource::collection(
-            $color->products()->with(['colors','sizes'])->latest()->get()
+            $color->products()->with(['colors', 'sizes'])->latest()->get()
         )->additional([
             'colors' => Color::has('products')->latest()->get(),
             'sizes' => Size::has('products')->latest()->get()
         ]);
     }
 
-    public function getProductWithSize(Size $size){
+    public function getProductWithSize(Size $size)
+    {
         return ProductResource::collection(
-            $size->products()->with(['colors','sizes'])->latest()->get()
+            $size->products()->with(['colors', 'sizes'])->latest()->get()
         )->additional([
             'colors' => Color::has('products')->latest()->get(),
             'sizes' => Size::has('products')->latest()->get()
         ]);
     }
 
-    public function productDetail(Product $product){
-        if(!$product){
+    public function productDetail(Product $product)
+    {
+        if (!$product) {
             abort(404);
         }
         return ProductResource::make(
-            $product->with(['colors','sizes'])->latest()->get()
-        )->additional([
-            'colors' => Color::has('products')->latest()->get(),
-            'sizes' => Size::has('products')->latest()->get()
-        ]);
+            $product->load(['colors', 'sizes'])
+        );
     }
 
-    public function getProductWithTerm($term){
+    public function getProductWithTerm($term)
+    {
         return ProductResource::collection(
-            Product::where('slug','LIKE','%'.$term.'%')->with(['colors','sizes'])->latest()->get()
+            Product::where('slug', 'LIKE', '%' . $term . '%')->with(['colors', 'sizes'])->latest()->get()
         )->additional([
             'colors' => Color::has('products')->latest()->get(),
             'sizes' => Size::has('products')->latest()->get()

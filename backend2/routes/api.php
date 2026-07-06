@@ -9,8 +9,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/products',[ProductController::class,"index"]);
-Route::get('/products/{color}/color',[ProductController::class,"getProductWithColor"]);
-Route::get('/products/{size}/size',[ProductController::class,"getProductWithSize"]);
-Route::get('/products/{product}/product',[ProductController::class,"productDetail"]);
-Route::get('/products/{term}/term',[ProductController::class,"getProductWithTerm"]);
+Route::get('/products', [ProductController::class, "index"]);
+Route::get('/products/{color}/color', [ProductController::class, "getProductWithColor"]);
+Route::get('/products/{size}/size', [ProductController::class, "getProductWithSize"]);
+Route::get('/products/{product}/productdetail', [ProductController::class, "productDetail"]);
+Route::get('/products/{term}/term', [ProductController::class, "getProductWithTerm"]);

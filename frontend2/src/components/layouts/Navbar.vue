@@ -1,45 +1,63 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary border shadow mb-3">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3 shadow p-3">
     <div class="container-fluid">
-        <div class="d-flex align-items-center p-3">
-            <img :src="'https://cdn.pixabay.com/photo/2012/04/16/11/34/shopping-35594_1280.png'" width="60"><h2>Shop T-Shirt</h2>
-        </div>
-        
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <router-link class="nav-link active" aria-current="page" to="/"><i class="bi bi-house-fill"></i> Home</router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link active" aria-current="page" to="/register"><i class="bi bi-person-fill"></i> Register</router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link active" aria-current="page" to="/login"><i class="bi bi-person-fill"></i> Login</router-link>
-            </li>
-            
-            <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </li> -->
-            
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Dropdown
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
         </ul>
         <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-            <button class="btn btn-outline-success" type="submit">Search</button>
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        </div>
+      </div>
     </div>
-</nav>
+  </nav>
 </template>
-<script setup></script>
+
+<script setup>
+</script>
 
 <style scoped>
-
 </style>

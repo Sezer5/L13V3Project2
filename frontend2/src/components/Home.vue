@@ -1,24 +1,22 @@
 <template>
- <div class="d-flex">
-  <Spinner :isLoading="productStore.isLoading" />
-  <Sidebar />
-  <ProductList />
- </div>
+  <div class="d-flex">
+    <Spinner :isLoading="productsStore.isLoading" />
+    <Sidebar />
+    <ProductList />
+  </div>
 </template>
 
 <script setup>
-import { useProductStore } from '@/stores/useProductStore.js';
-import Sidebar from './layouts/Sidebar.vue';
-import ProductList from './product/ProductList.vue';
-import { onMounted } from 'vue';
-import Spinner from './layouts/Spinner.vue';
+import { onMounted } from "vue";
+import Sidebar from "./layouts/Sidebar.vue";
+import Spinner from "./layouts/Spinner.vue";
+import ProductList from "./product/ProductList.vue";
+import { useProductsStore } from "@/stores/useProductsStore.js";
 
-const productStore = useProductStore();
+const productsStore = useProductsStore();
 
-onMounted(()=> productStore.fetchAllProducts())
-
+onMounted(() => productsStore.getAllProducts());
 </script>
 
 <style scoped>
-
 </style>

@@ -20,8 +20,8 @@ class ProductController extends Controller
     public function index()
     {
         return view('admin.product.index')->with([
-            'products' => Product::with(['colors','sizes'])->latest()->get(),
-            
+            'products' => Product::with(['colors', 'sizes'])->latest()->get(),
+
         ]);
     }
 
@@ -41,12 +41,12 @@ class ProductController extends Controller
      */
     public function store(AddProductRequest $request)
     {
-        if($request->validated()){
+        if ($request->validated()) {
             $data = $request->validated();
-            if($request->has('thumbnail')){
+            if ($request->has('thumbnail')) {
                 $data['thumbnail'] = $this->saveImage($request->file('thumbnail'));
             }
-            $data['slug']=Str::slug($request->name);
+            $data['slug'] = Str::slug($request->name);
             $product = Product::create($data);
             $product->colors()->sync($request->color_id);
             $product->sizes()->sync($request->size_id);
@@ -70,7 +70,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return view('admin.product.edit')->with([
-            'product' => $product->load('colors','sizes'),
+            'product' => $product->load('colors', 'sizes'),
             'colors' => Color::all(),
             'sizes' => Size::all()
         ]);
@@ -81,10 +81,10 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        if($request->validated()){
+        if ($request->validated()) {
             $data = $request->validated();
-            if($request->has('thumbnail')){
-                $this->deleteImage($product->file('thumbnail'));
+            if ($request->has('thumbnail')) {
+                $this->deleteImage($product->thumbnail);
                 $data['thumbnail'] = $this->saveImage($request->file('thumbnail'));
             }
             $data['slug'] = Str::slug($request->name);
@@ -102,20 +102,21 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $this->deleteImage($product->file('thumbnail'));
+        $this->deleteImage($product->thumbnail);
         return redirect()->route('admin.product.index')->with([
-                'success' => 'Product deleted successfully'
-            ]);
-
+            'success' => 'Product deleted successfully'
+        ]);
     }
 
-    public function saveImage($file){
-        $path = $file->store('images/product','public');
-        return 'storage/'.$path;
+    public function saveImage($file)
+    {
+        $path = $file->store('images/product', 'public');
+        return 'storage/' . $path;
     }
-    public function deleteImage($file){
+    public function deleteImage($file)
+    {
         $path = public_path($file);
-        if(File::exists($path)){
+        if (File::exists($path)) {
             File::delete($path);
         }
     }
