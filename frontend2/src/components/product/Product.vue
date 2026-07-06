@@ -49,7 +49,11 @@
 
         <!-- Product Details -->
         <div class="col-md-6">
-          <h1 class="h2 mb-3">{{ productDetailStore.product?.name }}</h1>
+          <h1 class="h2 mb-3">
+            {{ productDetailStore.product?.name }} #{{
+              productDetailStore.product?.id
+            }}
+          </h1>
           <div class="mb-3">
             <span class="h4 me-2"
               >${{ productDetailStore.product?.price }}</span
@@ -137,6 +141,21 @@
               class="btn btn-primary"
               type="button"
               :disabled="!data.chosenColor || !data.chosenSize"
+              @click="
+                cartStore.addToCart({
+                  ref: makeUniqueId(10),
+                  product_id: productDetailStore.product?.id,
+                  name: productDetailStore.product?.name,
+                  slug: productDetailStore.product?.slug,
+                  qty: data.qty,
+                  color: data.chosenColor?.name,
+                  size: data.chosenSize?.name,
+                  price: productDetailStore.product?.price,
+                  maxQty: productDetailStore.product?.qty,
+                  thumbnail: productDetailStore.product?.thumbnail,
+                  coupon_id: null,
+                })
+              "
             >
               Add to Cart
             </button>
@@ -173,10 +192,12 @@ import Spinner from "../layouts/Spinner.vue";
 import { useProductsStore } from "@/stores/useProductsStore.js";
 import { useRoute } from "vue-router";
 import { useProductDetailsStore } from "@/stores/useProductDetailStore.js";
-import { IMAGE_URL } from "@/helpers/config.js";
+import { IMAGE_URL, makeUniqueId } from "@/helpers/config.js";
+import { useCartStore } from "@/stores/useCartStore.js";
 
 const productsStore = useProductsStore();
 const productDetailStore = useProductDetailsStore();
+const cartStore = useCartStore();
 const route = useRoute();
 
 const data = reactive({

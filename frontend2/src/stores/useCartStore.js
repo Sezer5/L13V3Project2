@@ -36,13 +36,34 @@ export const useCartStore = defineStore('cart', {
                     toast.info("You can not order maximum quantity of product!", {
                     timeout: 2000
                 });
+            }else{
+                this.cartItems[index].qty +=1 
             }
-        }else{
-            this.cartItems.push(item)
-            toast.info("Product added in your cart!", {
-                timeout: 2000
-            });
         }
+    },
+    decrementQty(item){
+        let index = this.cartItems.findIndex(product=> product.product_id === item.product_id && product.color === item.color && product.size === item.size)
+
+        // if the product exist
+
+        if(index!==-1){
+            this.cartItems[index].qty -=1 
+            if(this.cartItems[index].qty === 0){
+                this.cartItems = this.cartItems.filter(product => product.ref !== item.ref)
+                toast.info("Product removed from your cart!", {
+                    timeout: 2000
+                });
+            }
+        }
+    },
+    removeFromCart(item){
+        this.cartItems = this.cartItems.filter(product => product.ref !== item.ref)
+          toast.info("Product removed from your cart!", {
+                    timeout: 2000
+                });
+    },
+    clearCartItems(){
+        this.cartItems = []
     }
   },
 })
