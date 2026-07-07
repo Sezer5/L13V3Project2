@@ -1,183 +1,93 @@
 <template>
   <div class="d-flex">
-    <Spinner :isLoading="productDetailStore.isLoading" />
     <Sidebar />
-    <div class="container p-5">
-      <div class="row">
-        <!-- Product Images -->
-        <div class="col-md-6 mb-4">
-          <div class="card">
+
+    <div class="container-fluid p-4">
+      <Spinner :isLoading="productDetailStore.isLoading" />
+
+      <div
+        v-if="!productDetailStore.isLoading && productDetailStore.product"
+        class="row"
+      >
+        <!-- Sol: Ürün Resmi -->
+        <div class="col-md-5 mb-4">
+          <div class="card border-0 shadow-sm p-2">
             <img
-              :src="`${IMAGE_URL}` + productDetailStore.product?.thumbnail"
-              class="card-img-top"
-              alt="Product Image"
+              :src="`${IMG_URL}` + productDetailStore.product?.thumbnail"
+              class="img-fluid rounded"
+              alt="Ürün Resmi"
             />
-            <div class="card-body">
-              <div class="row g-2">
-                <div class="col-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwyfHx3YXRjaHxlbnwwfDB8fHwxNzM0OTY1MTc4fDA&ixlib=rb-4.0.3&q=80&w=1080"
-                    class="img-thumbnail"
-                    alt="Thumbnail 1"
-                  />
-                </div>
-                <div class="col-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1495857000853-fe46c8aefc30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw2fHx3YXRjaHxlbnwwfDB8fHwxNzM0OTY1MTc4fDA&ixlib=rb-4.0.3&q=80&w=1080"
-                    class="img-thumbnail"
-                    alt="Thumbnail 2"
-                  />
-                </div>
-                <div class="col-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1451859757691-f318d641ab4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw3fHx3YXRjaHxlbnwwfDB8fHwxNzM0OTY1MTc4fDA&ixlib=rb-4.0.3&q=80&w=1080"
-                    class="img-thumbnail"
-                    alt="Thumbnail 3"
-                  />
-                </div>
-                <div class="col-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1490915785914-0af2806c22b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwzfHx3YXRjaHxlbnwwfDB8fHwxNzM0OTY1MTc4fDA&ixlib=rb-4.0.3&q=80&w=1080"
-                    class="img-thumbnail"
-                    alt="Thumbnail 4"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
-        <!-- Product Details -->
-        <div class="col-md-6">
-          <h1 class="h2 mb-3">
-            {{ productDetailStore.product?.name }} #{{
-              productDetailStore.product?.id
+        <!-- Sağ: Ürün Bilgileri -->
+        <div class="col-md-7 ps-md-5">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h2 class="fw-bold">{{ productDetailStore.product?.name }}</h2>
+            <span class="badge bg-light text-dark border"
+              >#{{ productDetailStore.product?.id }}</span
+            >
+          </div>
+
+          <h3 class="text-primary fw-bold mb-4">
+            $ {{ productDetailStore.product?.price }}
+          </h3>
+
+          <p class="text-muted mb-4">
+            {{
+              productDetailStore.product?.desc ||
+              "Bu ürün için açıklama girilmemiş."
             }}
-          </h1>
-          <div class="mb-3">
-            <span class="h4 me-2"
-              >${{ productDetailStore.product?.price }}</span
-            >
-          </div>
+          </p>
 
-          <div class="mb-3">
-            <div class="d-flex align-items-center">
-              <div class="text-warning me-2">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-              <span class="text-muted">(128 reviews)</span>
-            </div>
-          </div>
+          <hr />
 
-          <p
-            class="mb-4"
-            v-dompurify-html="productDetailStore.product?.desc"
-          ></p>
-
-          <!-- Color Selection -->
-          <div class="mb-4 d-flex justify-content-start">
-            <div class="border p-3">
-              <h6 class="mb-2">Color</h6>
-              <div class="btn-group" role="group">
-                <div
-                  v-for="color in productDetailStore.product?.colors"
-                  :key="color.id"
-                  :style="{
-                    backgroundColor: color.name,
-                    width: '20px',
-                    height: '20px',
-                    margin: '0px 10px',
-                    borderRadius: '10px',
-                  }"
-                  :class="`${
-                    data.chosenColor?.id === color.id
-                      ? 'border shadow rounded'
-                      : ''
-                  }`"
-                  @click="setChoosenColor(color)"
-                ></div>
-              </div>
-            </div>
-            <div class="border p-3">
-              <h6 class="mb-2">Sizes</h6>
-              <div class="btn-group" role="group">
-                <span
-                  v-for="size in productDetailStore.product?.sizes"
-                  :key="size.id"
-                  :class="`${
-                    data.chosenSize?.id === size.id
-                      ? 'badge bg-success mx-1 shadow'
-                      : 'badge bg-secondary mx-1 shadow'
-                  }`"
-                  @click="setChoosenSize(size)"
-                  >{{ size.name }}</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Quantity -->
+          <!-- Renk Seçimi -->
           <div class="mb-4">
-            <div class="d-flex align-items-center">
-              <label class="me-2">Quantity:</label>
-              <input
-                type="number"
-                class="form-control w-auto"
-                value="1"
-                :min="1"
-                :max="productDetailStore.product?.qty"
-                v-model="data.qty"
-              />
+            <h6 class="fw-bold">Renk:</h6>
+            <div class="d-flex gap-2">
+              <div
+                v-for="color in productDetailStore.product?.colors"
+                :key="color.id"
+                @click="setChoosenColor(color)"
+                class="color-picker"
+                :class="{ active: data.choosenColor?.id === color.id }"
+                :style="{ backgroundColor: color.name }"
+              ></div>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="d-grid gap-2">
+          <!-- Beden Seçimi -->
+          <div class="mb-4">
+            <h6 class="fw-bold">Beden:</h6>
+            <div class="d-flex gap-2">
+              <span
+                v-for="size in productDetailStore.product?.sizes"
+                :key="size.id"
+                @click="setChoosenSize(size)"
+                class="size-badge"
+                :class="{ active: data.choosenSize?.id === size.id }"
+              >
+                {{ size.name }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Miktar ve Sepet -->
+          <div class="d-flex align-items-center gap-3">
+            <input
+              type="number"
+              v-model="data.qty"
+              class="form-control w-25"
+              min="1"
+              :max="productDetailStore.product?.qty"
+            />
             <button
-              class="btn btn-primary"
-              type="button"
-              :disabled="!data.chosenColor || !data.chosenSize"
-              @click="
-                cartStore.addToCart({
-                  ref: makeUniqueId(10),
-                  product_id: productDetailStore.product?.id,
-                  name: productDetailStore.product?.name,
-                  slug: productDetailStore.product?.slug,
-                  qty: data.qty,
-                  color: data.chosenColor?.name,
-                  size: data.chosenSize?.name,
-                  price: productDetailStore.product?.price,
-                  maxQty: productDetailStore.product?.qty,
-                  thumbnail: productDetailStore.product?.thumbnail,
-                  coupon_id: null,
-                })
-              "
+              :disabled="!data.choosenColor || !data.choosenSize"
+              class="btn btn-success px-4"
             >
-              Add to Cart
+              Sepete Ekle
             </button>
-            <button class="btn btn-outline-secondary" type="button">
-              <i class="far fa-heart me-2"></i>Add to Wishlist
-            </button>
-          </div>
-
-          <!-- Additional Info -->
-          <div class="mt-4">
-            <div class="d-flex align-items-center mb-2">
-              <i class="fas fa-truck text-primary me-2"></i>
-              <span>Free shipping on orders over $50</span>
-            </div>
-            <div class="d-flex align-items-center mb-2">
-              <i class="fas fa-undo text-primary me-2"></i>
-              <span>30-day return policy</span>
-            </div>
-            <div class="d-flex align-items-center">
-              <i class="fas fa-shield-alt text-primary me-2"></i>
-              <span>2-year warranty</span>
-            </div>
           </div>
         </div>
       </div>
@@ -186,41 +96,59 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
 import Sidebar from "../layouts/Sidebar.vue";
 import Spinner from "../layouts/Spinner.vue";
-import { useProductsStore } from "@/stores/useProductsStore.js";
+import { onMounted, reactive } from "vue";
+import { useProductDetailStore } from "@/stores/useProductDetailStore.js";
 import { useRoute } from "vue-router";
-import { useProductDetailsStore } from "@/stores/useProductDetailStore.js";
-import { IMAGE_URL, makeUniqueId } from "@/helpers/config.js";
-import { useCartStore } from "@/stores/useCartStore.js";
+import { IMG_URL } from "../helpers/config.js";
 
-const productsStore = useProductsStore();
-const productDetailStore = useProductDetailsStore();
-const cartStore = useCartStore();
+const productDetailStore = useProductDetailStore();
 const route = useRoute();
 
 const data = reactive({
-  chosenColor: null,
-  chosenSize: null,
+  choosenColor: null,
+  choosenSize: null,
   qty: 1,
 });
 
-onMounted(() => {
-  productsStore.getAllProducts();
-  productDetailStore.getProductsWithTerm(route.params.slug);
-});
+const setChoosenColor = (color) => (data.choosenColor = color);
+const setChoosenSize = (size) => (data.choosenSize = size);
 
-// set chosen color by user
-
-const setChoosenColor = (color) => {
-  data.chosenColor = color;
-};
-
-const setChoosenSize = (size) => {
-  data.chosenSize = size;
-};
+onMounted(() => productDetailStore.getProductDetail(route.params.slug));
 </script>
 
 <style scoped>
+.color-picker {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s;
+}
+
+.color-picker.active {
+  border-color: #333;
+  transform: scale(1.1);
+}
+
+.size-badge {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-badge.active {
+  background-color: #198754;
+  color: white;
+  border-color: #198754;
+}
+
+.img-fluid {
+  max-height: 400px;
+  object-fit: contain;
+}
 </style>

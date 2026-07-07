@@ -1,61 +1,68 @@
 <template>
   <div
-    class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary border shadow vh-100"
+    class="d-flex flex-column flex-shrink-0 p-3 text-white bg-light border"
     style="width: 280px"
   >
+    <a
+      href="/"
+      class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none"
+    >
+      <svg class="bi me-2" width="40" height="32">
+        <use xlink:href="#bootstrap"></use>
+      </svg>
+      <span class="fs-4">Search</span>
+    </a>
+    <hr style="color: black; height: 4px" />
     <ul class="nav nav-pills flex-column mb-auto">
       <li>
         <div class="input-group mb-3">
           <input
             type="text"
             class="form-control"
-            placeholder="Search Product..."
-            aria-label="Search Product..."
-            aria-describedby="basic-addon2"
+            placeholder="Search..."
             v-model="data.term"
           />
           <div class="input-group-append">
             <button
               class="btn btn-outline-secondary"
               type="button"
-              :disabled="!data.term"
-              @click="productsStore.getProductsWithTerm(data.term)"
+              @click="productStore.getProductByTerm(data.term)"
+              :disabled="data.term === ''"
             >
               <i class="bi bi-search"></i>
             </button>
           </div>
         </div>
       </li>
-      <li><hr /></li>
-      <li class="text-center">
-        <h3>Colors</h3>
-      </li>
-      <li class="nav-item d-flex justify-content-between">
-        <div
-          v-for="color in productsStore.colors"
-          :key="color.id"
-          @click="productsStore.getProductsWithColor(color.slug)"
-          :style="{
-            backgroundColor: color.name,
-            width: '30px',
-            height: '30px',
-            borderRadius: '30px',
-            display: 'inline-block',
-          }"
-        ></div>
-      </li>
-      <li>
+      <li class="text-black">
+        <h6>Colors</h6>
         <hr />
       </li>
-      <li class="text-center">
-        <h3>Sizes</h3>
+      <li class="nav-item d-flex justify-content-around">
+        <div
+          v-for="color in productStore.colors"
+          :key="color.id"
+          :style="{
+            backgroundColor: color.name,
+            width: '20px',
+            height: '20px',
+            borderRadius: '20px',
+            cursor: 'pointer',
+          }"
+          @click="productStore.getProductByColor(color.slug)"
+        ></div>
       </li>
-      <li class="nav-item d-flex justify-content-between">
+      <li class="text-black mt-3">
+        <h6>Sizes</h6>
+        <hr />
+      </li>
+      <li class="nav-item d-flex justify-content-around mt-3">
         <span
-          v-for="size in productsStore.sizes"
-          @click="productsStore.getProductsWithSize(size.slug)"
+          v-for="size in productStore.sizes"
           :key="size.id"
-          class="badge bg-secondary text-white"
+          class="badge bg-secondary"
+          style="cursor: pointer"
+          @click="productStore.getProductBySize(size.slug)"
           >{{ size.name }}</span
         >
       </li>
@@ -65,17 +72,15 @@
 </template>
 
 <script setup>
+import { useProductStore } from "@/stores/useProductStore";
 import { onMounted, reactive } from "vue";
-import { useProductsStore } from "@/stores/useProductsStore.js";
 
-const productsStore = useProductsStore();
+const productStore = useProductStore();
+
+onMounted(() => productStore.getAllProducts());
 
 const data = reactive({
   term: "",
-});
-
-onMounted(() => {
-  productsStore.getAllProducts();
 });
 </script>
 

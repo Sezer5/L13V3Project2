@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex flex-wrap">
+  <div class="p-1 d-flex flex-wrap">
     <ProductListItem
-      v-for="product in productsStore.products"
+      v-for="product in productStore.products"
       :key="product.id"
       :product="product"
     />
@@ -9,13 +9,10 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useProductsStore } from "@/stores/useProductsStore.js";
+import { useProductStore } from "@/stores/useProductStore.js";
 import ProductListItem from "./ProductListItem.vue";
 
-const productsStore = useProductsStore();
-
-onMounted(() => productsStore.getAllProducts());
+const productStore = useProductStore();
 </script>
 
 <style scoped>

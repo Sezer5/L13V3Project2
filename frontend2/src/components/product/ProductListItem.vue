@@ -1,44 +1,56 @@
 <template>
-  <div class="p-3">
-    <div class="card" style="max-width: 300px">
-      <img
-        :src="`${IMAGE_URL}` + data.product.thumbnail"
-        class="card-img-top"
-        alt="Product Image"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ data.product.name }}</h5>
-        <p class="card-text">{{ data.product.desc.substr(0, 30) }}</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <span class="h5 mb-0">${{ data.product.price }}</span>
-          <div>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-            <i class="bi bi-star-half text-warning"></i>
-            <small class="text-muted">(4.5)</small>
-          </div>
+  <div class="card m-2 shadow" style="width: 18rem">
+    <img
+      :src="`${IMG_URL}` + product.thumbnail"
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <router-link :to="'/productdetail/' + product.slug"
+        ><h5 class="card-title">{{ product.name }}</h5></router-link
+      >
+      <hr />
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex">
+          <div
+            v-for="color in product.colors"
+            :key="color.id"
+            :style="{
+              backgroundColor: color.name,
+              width: '10px',
+              height: '10px',
+              borderRadius: '10px',
+              margin: '0px 3px',
+            }"
+          ></div>
+        </div>
+        <div>
+          <span
+            v-for="size in product.sizes"
+            :key="size.id"
+            class="badge bg-secondary mx-1"
+            >{{ size.name }}</span
+          >
         </div>
       </div>
-      <div class="card-footer d-flex justify-content-between bg-light">
-        <router-link
-          class="btn btn-primary btn-sm"
-          :to="'/productdetail/' + data.product.slug"
-          >Add to Cart</router-link
-        >
-        <button class="btn btn-outline-secondary btn-sm">
-          <i class="bi bi-heart"></i>
-        </button>
+      <p class="card-text" v-dompurify-html="product.desc.substr(0, 50)"></p>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <a href="#" class="btn btn-primary">
+            <i class="bi bi-eye"></i>
+          </a>
+        </div>
+        <div>
+          <h3>${{ product.price }}</h3>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { IMAGE_URL } from "@/helpers/config";
-
-const data = defineProps({
+import { IMG_URL } from "../helpers/config";
+const props = defineProps({
   product: {
     type: Object,
     required: true,
