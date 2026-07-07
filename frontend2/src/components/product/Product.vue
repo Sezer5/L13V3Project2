@@ -85,6 +85,20 @@
             <button
               :disabled="!data.choosenColor || !data.choosenSize"
               class="btn btn-success px-4"
+              @click="
+                cartStore.addItemCart({
+                  ref: makeUniqueId(10),
+                  product_id: productDetailStore.product?.id,
+                  name: productDetailStore.product?.name,
+                  slug: productDetailStore.product?.slug,
+                  qty: data.qty,
+                  color: data.choosenColor?.name,
+                  size: data.choosenSize?.name,
+                  maxQty: productDetailStore.product?.qty,
+                  image: productDetailStore.product?.thumbnail,
+                  copuon_id: null,
+                })
+              "
             >
               Sepete Ekle
             </button>
@@ -101,10 +115,12 @@ import Spinner from "../layouts/Spinner.vue";
 import { onMounted, reactive } from "vue";
 import { useProductDetailStore } from "@/stores/useProductDetailStore.js";
 import { useRoute } from "vue-router";
-import { IMG_URL } from "../helpers/config.js";
+import { IMG_URL, makeUniqueId } from "../helpers/config.js";
+import { useCartStore } from "@/stores/useCartStore.js";
 
 const productDetailStore = useProductDetailStore();
 const route = useRoute();
+const cartStore = useCartStore();
 
 const data = reactive({
   choosenColor: null,
