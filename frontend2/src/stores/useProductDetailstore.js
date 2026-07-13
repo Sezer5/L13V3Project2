@@ -1,8 +1,9 @@
-import { BASE_URL } from '@/components/helpers/config'
+import { BASE_URL } from '@/helpers/config'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-export const useProductDetailStore = defineStore('productdetail', {
+
+export const useProductDetailStore = defineStore('productDetail', {
   state: () => ({ 
     product:null,
     isLoading:false
@@ -11,17 +12,16 @@ export const useProductDetailStore = defineStore('productdetail', {
     doubleCount: (state) => state.count * 2,
   },
   actions: {
-    async getProductDetail(slug){
-        this.isLoading=true
-        try {
-            const response = await axios.get(`${BASE_URL}products/${slug}/productdetail`)
-            this.product = response.data.data
-            this.isLoading=false
-        } catch (error) {
-            console.log(error)
-            this.isLoading=false
-        }
-    },
-
+    async getProductByTerm(term){
+      this.isLoading=true
+      try {
+        const response = await axios.get(`${BASE_URL}/api/products/${term}/term`)
+        this.product = response.data.data[0]
+        this.isLoading=false
+      } catch (error) {
+        console.log(error)
+        this.isLoading=false
+      }
+    }
   },
 })
